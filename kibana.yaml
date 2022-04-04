@@ -1,0 +1,42 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: kibana-ha
+spec:
+  version: 8.1.2
+  http:
+    service:
+      spec:
+        type: LoadBalancer
+  count: 1
+  elasticsearchRef:
+    name: "ha"
+  podTemplate:
+    spec:
+      containers:
+        - name: kibana
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 1
+            limits:
+              memory: 1Gi
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: kb
+spec:
+  scaleTargetRef:
+    apiVersion: kibana.k8s.elastic.co/v1
+    kind: Kibana
+    name: kibana-ha
+  minReplicas: 1
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50              

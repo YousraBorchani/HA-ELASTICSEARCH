@@ -1,0 +1,229 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: ha
+spec:
+  version: 7.5.2
+  http:
+    service:
+      spec:
+        type: LoadBalancer
+  nodeSets:
+  - name: master-b
+    count: 1
+    config:
+      node.master: true
+      node.data: false
+      node.ingest: false
+      node.attr.zone: us-east-1b
+      cluster.routing.allocation.awareness.attributes: zone
+    podTemplate:
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: failure-domain.beta.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - us-east-1b
+  - name: data-b
+    count: 2
+    config:
+      node.master: false
+      node.data: true
+      node.ingest: false
+      node.attr.zone: us-east-1b
+      cluster.routing.allocation.awareness.attributes: zone
+    podTemplate:
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: failure-domain.beta.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - us-east-1b
+  - name: ingest-b
+    count: 2
+    config:
+      node.master: false
+      node.data: false
+      node.ingest: false
+      node.attr.zone: us-east-1b
+      cluster.routing.allocation.awareness.attributes: zone
+    podTemplate:
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: failure-domain.beta.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - us-east-1b  
+#                  
+  - name: master-c
+    count: 1
+    config:
+      node.master: true
+      node.data: false
+      node.ingest: false
+      node.attr.zone: us-east-1c
+      cluster.routing.allocation.awareness.attributes: zone
+    podTemplate:
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: failure-domain.beta.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - us-east-1c
+  - name: data-c
+    count: 2
+    config:
+      node.master: false
+      node.data: true
+      node.ingest: false
+      node.attr.zone: us-east-1c
+      cluster.routing.allocation.awareness.attributes: zone
+    podTemplate:
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: failure-domain.beta.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - us-east-1c
+  - name: ingest-c
+    count: 2
+    config:
+      node.master: false
+      node.data: false
+      node.ingest: false
+      node.attr.zone: us-east-1c
+      cluster.routing.allocation.awareness.attributes: zone
+    podTemplate:
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: failure-domain.beta.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - us-east-1c      
+#                            
+  - name: master-d
+    count: 1
+    config:
+      node.master: true
+      node.data: false
+      node.ingest: false
+      node.attr.zone: us-east-1d
+      cluster.routing.allocation.awareness.attributes: zone
+    podTemplate:
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: failure-domain.beta.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - us-east-1d
+  - name: data-d
+    count: 2
+    config:
+      node.master: false
+      node.data: true
+      node.ingest: false
+      node.attr.zone: us-east-1d
+      cluster.routing.allocation.awareness.attributes: zone
+    podTemplate:
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: failure-domain.beta.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - us-east-1d
+  - name: ingest-d
+    count: 2
+    config:
+      node.master: false
+      node.data: false
+      node.ingest: false
+      node.attr.zone: us-east-1d
+      cluster.routing.allocation.awareness.attributes: zone
+    podTemplate:
+      spec:
+        initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: failure-domain.beta.kubernetes.io/zone
+                  operator: In
+                  values:
+                  - us-east-1d                  
