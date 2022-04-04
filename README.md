@@ -9,22 +9,22 @@
 1. Designing for resilience
     - At least three master-eligible nodes
     - At least two nodes of each role 
-        - Master-eligible node
+        - Master-eligible node: 
             Controls the cluster. 
-        - Data node
+        - Data node:
             Hold data and perform data related operations such as CRUD, search, and aggregations. 
-        - Ingest node 
+        - Ingest node: 
            Apply an ingest pipeline to a document in order to transform and enrich the document before indexing. 
 
     - At least two copies of each shard 
 2. Cross-cluster replication    
-    Replicate data to a remote follower cluster which may be in a different data 
+    - Replicate data to a remote follower cluster which may be in a different data 
     centre or even on a different continent from the leader cluster. 
-    The follower cluster acts as a hot standby, ready for you to fail over in the 
+    - The follower cluster acts as a hot standby, ready for you to fail over in the 
     event of a disaster so severe that the leader cluster fails. 
-    The follower cluster can also act as a geo-replica to serve searches from nearby clients.  
+    - The follower cluster can also act as a geo-replica to serve searches from nearby clients.  
 3. Regular snapshots 
-    Restore a completely fresh copy of it elsewhere if needed
+    - Restore a completely fresh copy of it elsewhere if needed
 
 #### |Scenario: Is my cluster really highly available?|
 For a cluster to be able to handle the failure of a node, 
@@ -51,7 +51,6 @@ kubectl -n elastic-system logs -f statefulset.apps/elastic-operator
 
 4. Create storage class
 ```
-cd ECK/
 kubectl create -f storage-class.yaml
 ```
 
