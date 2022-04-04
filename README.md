@@ -1,11 +1,11 @@
 # || HA Elasticsearch ||
 
-#### |An architecture overview|
+### |An architecture overview|
 
 ![alt text](https://github.com/YousraBorchani/HA-ELASTICSEARCH/blob/main/ha-es-architecture.png?raw=true)
 
 
-#### |Set up a cluster for high availability|
+### |Set up a cluster for high availability|
 1. Designing for resilience
     - At least three master-eligible nodes
     - At least two nodes of each role 
@@ -26,12 +26,12 @@
 3. Regular snapshots 
     - Restore a completely fresh copy of it elsewhere if needed
 
-#### |Scenario: Is my cluster really highly available?|
+### |Scenario: Is my cluster really highly available?|
 For a cluster to be able to handle the failure of a node, 
 it should be considered at capacity when it uses 50% of its resources 
 Therefore you need to increase its size or reduce its workload
 
-#### |Deploy ES cluster | 
+### |Deploy ES cluster | 
 
 1. Configure kubectl
 
@@ -92,14 +92,14 @@ IP=$(kubectl get svc ha-es-http -o jsonpath='{.status.loadBalancer.ingress[].hos
 curl --cacert tls.crt -k -u elastic:$PW https://$IP:9200/
 ```
 
-#### |Deploy Kibana cluster | 
+### |Deploy Kibana cluster | 
 
 1. Deploy Kibana Cluster
 ```
 kubectl apply -f kibana.yaml
 ```
 
-#### |Production ready |
+### |Production ready |
 
 - Create your own certificate
 - Deploy Cross-cluster replication
